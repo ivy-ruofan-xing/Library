@@ -1,0 +1,40 @@
+﻿@model Library.Models.Book
+
+@{
+    ViewBag.Title = "Search";
+}
+
+<h2>Search</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Search</h2>
+        <p>Search for books by title, ISBN, and author.</p>
+
+        
+        @*<p>
+                <a class="input-group"></a>
+                <a class="btn btn-default" href="@Url.Action("Details", "Book", new { id=1 })">Detail</a>
+            </p>*@
+
+        <form>
+            <div class="form-group">
+                <label for="InputTitle">Search by Title</label>
+                <input type="text" class="form-control" id="InputTitle" placeholder="Enter book title">
+            </div>
+            <div class="form-group">
+                <label for="InputISBN">Search by ISBN</label>
+                <input type="text" class="form-control" id="InputISBN" placeholder="Enter ISBN">
+            </div>
+            <div class="form-group">
+                <label for="InputAuthor">Search by Author</label>
+                <input type="text" class="form-control" id="InputAuthor" placeholder="Enter author name">
+            </div>
+            <button type="submit" class="btn btn-primary" href="@Url.Action("List", "Book")">Search</button>
+        </form>
+    </div>
+</div>
+
+<p>
+    @Html.ActionLink("Back", "Index", "Home")
+</p>

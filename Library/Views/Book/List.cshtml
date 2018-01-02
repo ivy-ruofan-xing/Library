@@ -1,14 +1,11 @@
 ﻿@model IEnumerable<Library.Models.Book>
 
 @{
-    ViewBag.Title = "List";
+    ViewBag.Title = "Search Result";
 }
 
 <h2>List</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
         <th>
@@ -49,3 +46,9 @@
 }
 
 </table>
+
+<p>
+    @Html.ActionLink("Create New", "Create") |
+    @Html.ActionLink("New Search", "Search") |
+    @Html.ActionLink("Back to Home", "Index", "Home")
+</p>

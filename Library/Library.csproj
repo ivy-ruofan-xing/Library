@@ -158,6 +158,7 @@
     </Compile>
     <Compile Include="Models\Book.cs" />
     <Compile Include="Models\BookDBContext.cs" />
+    <Compile Include="Models\ViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -203,6 +204,8 @@
     <Content Include="Views\Book\Create.cshtml" />
     <Content Include="Views\Book\List.cshtml" />
     <Content Include="Views\Book\Search.cshtml" />
+    <Content Include="Views\Book\Edit.cshtml" />
+    <Content Include="Views\Book\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

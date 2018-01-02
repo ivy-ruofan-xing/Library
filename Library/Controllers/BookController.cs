@@ -1,9 +1,12 @@
 ﻿using Library.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace Library.Controllers
 {
@@ -27,14 +30,51 @@ namespace Library.Controllers
         [HttpPost]
         public ActionResult Search(FormCollection collection)
         {
-            return View();
+            try
+            {
+                string Title = collection.Get("Title");
+                string ISBN = collection.Get("ISBN");
+                string Author = collection.Get("Author");
+
+                if (Title == "" && ISBN == "" && Author == "")
+                {
+                    return View();
+                }
+
+                var Books = db.Books.ToList();
+
+                if ("" != Title)
+                {
+                    Books = Books.Where(c => c.Title.Contains(Title)).ToList();
+                }
+
+                if ("" != ISBN)
+                {
+                    Books = Books.Where(c => c.ISBN == ISBN).ToList();
+                }
+
+                if ("" != Author)
+                {
+                    Books = Books.Where(c => c.Author.Contains(Author)).ToList();
+                }
+
+                TempData["Books"] = Books;
+
+                return RedirectToAction("List");
+            }
+            catch
+            {
+                return View();
+            }
         }
 
         //GET: Book/List
+        [ActionName("List")]
         public ActionResult List()
         {
-            var books = db.Books.Where(c => c.Title == "").ToList();
-            return View(books);
+            var Books = TempData["Books"];
+
+            return View(Books);
         }
 
         // GET: Book/Details/5
@@ -75,45 +115,49 @@ namespace Library.Controllers
         // GET: Book/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var Book = db.Books.Find(id);
+            if (Book == null)
+            {
+                return HttpNotFound();
+            }
+            return View(Book);
         }
 
-        // POST: Book/Edit/5
+        // POST: Book/Edit
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit([Bind(Include = "Id,Title,ISBN,Author,Description")] Book book)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
+                db.Entry(book).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Details", new { id = book.Id});
             }
-            catch
-            {
-                return View();
-            }
+            return View(book);
         }
 
         // GET: Book/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            Book book = db.Books.Find(id);
+            if (book == null)
+            {
+                return HttpNotFound();
+            }
+            return View(book);
         }
 
         // POST: Book/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        [ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
         {
-            try
-            {
-                // TODO: Add delete logic here
+            Book book = db.Books.Find(id);
+            db.Books.Remove(book);
+            db.SaveChanges();
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction("Index", "Home");
         }
     }
 }
